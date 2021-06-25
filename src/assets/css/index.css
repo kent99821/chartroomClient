@@ -1,0 +1,21 @@
+.error-msg {
+    color: red;
+    text-align: center;
+    font-size: 18px;
+}
+
+.am-tab-bar {
+    /*使导航始终在底部*/
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: inherit;
+}
+.sticky-header {
+    /*使导航始终在底部*/
+    position: fixed;
+    z-index:10 ;
+    top: 0;
+    width: 100%;
+    height: 20vw;
+}
