@@ -8,6 +8,7 @@ const Brief = Item.Brief;
  class Personal extends React.Component {
      
       logout=()=>{
+        console.log(123);
           Modal.alert('退出','确认退出登录吗？',[
                {
                     text:'取消',
