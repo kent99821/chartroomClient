@@ -4,7 +4,25 @@
 
 import { reqRegister, reqLogin, reqUpdateUser,reqUser, reqUserList } from '../api'
 import { ERROR_MSG, AUTH_SUCCESS,RECEIVE_USER,RESET_USER, RECEIVE_USER_LIST } from "./action-types";
+   //连接客户端io
+import io from 'socket.io-client'
 
+// 初始化socketIO
+function initIO(){
+
+//单例对象 
+// 1.创建对象之前：判断对象是否已经创建，只有不存在才获取创建
+// 2.创建对象：保存对象
+// 连接服务器
+if(!io.socket){
+   io.socket=io('ws://localhost:5000')
+   io.socket.on('recevieMsg',function(chatMsg){
+      console.log("接收到服务器的消息",chatMsg)
+      })
+}
+
+
+}
 //授权成功的同步action
 const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user })
 // 错误提示信息的action
@@ -15,7 +33,6 @@ const receiveUser=(user)=>({type:RECEIVE_USER,data:user})
 export const resetUser=(msg)=>({type:RESET_USER,data:msg})
 // 接收用户列表的同步action
 export const receiveUserList=(userList)=>({type:RECEIVE_USER_LIST,data:userList})
-
 
 
 // 异步action 注册
@@ -106,5 +123,8 @@ export const getUserList=(type)=>{
 export const sendMsg=(from,to,content)=>{
    return dispatch=>{
       console.log('发送消息',from,to,content);
+      initIO()
+      // 发送消息
+      io.socket.emit('sendMsg',{from,to,content})
    }
 }
