@@ -2,8 +2,8 @@
 // 异步action
 // 同步action
 
-import { reqRegister, reqLogin, reqUpdateUser,reqUser, reqUserList } from '../api'
-import { ERROR_MSG, AUTH_SUCCESS,RECEIVE_USER,RESET_USER, RECEIVE_USER_LIST } from "./action-types";
+import { reqRegister, reqLogin, reqUpdateUser,reqUser, reqUserList,reqChatMsgList,reqReadMsg } from '../api'
+import { ERROR_MSG, AUTH_SUCCESS,RECEIVE_USER,RESET_USER, RECEIVE_USER_LIST,RECEIVE_MSG_LIST,RECEIVE_MSG } from "./action-types";
    //连接客户端io
 import io from 'socket.io-client'
 
@@ -33,6 +33,8 @@ const receiveUser=(user)=>({type:RECEIVE_USER,data:user})
 export const resetUser=(msg)=>({type:RESET_USER,data:msg})
 // 接收用户列表的同步action
 export const receiveUserList=(userList)=>({type:RECEIVE_USER_LIST,data:userList})
+// 接收信息列表的同步action
+export const receiveMsgList=({users,chatMsgs})=>({type:RECEIVE_MSG_LIST,data:{users,chatMsgs}})
 
 
 // 异步action 注册
@@ -50,6 +52,7 @@ export const register = ({ username, password, password2, type }) => {
       const result = response.data
       if (result.code == 0) {//成功
          //分发成功action
+         getMsgList(dispatch)
          dispatch(authSuccess(result.data))
       } else {//失败
 
@@ -73,6 +76,7 @@ export const login = (user) => {
       const res = await reqLogin(user)
       const result = res.data
       if (result.code == 0) {//成功
+         getMsgList(dispatch)
          //分发成功action
          dispatch(authSuccess(result.data))
       } else {//失败
@@ -100,6 +104,7 @@ export const getUser=()=>{
       const response=await reqUser()
           const result=response.data
           if(result.code===0){ //更新data
+            getMsgList(dispatch)
               dispatch (receiveUser(result.data))
           }else{//更新失败：msg
               dispatch(resetUser(result.msg))
@@ -119,11 +124,24 @@ export const getUserList=(type)=>{
       }
    }
 }
+// 获取消息列表
+async function getMsgList (dispatch){
+   initIO()
+   const response=await reqChatMsgList()
+   const result=response.data
+   if(result.code===0){
+      const {users,chatMsgs}=result.data
+      // 分发同步action
+      dispatch(receiveMsgList({users,chatMsgs})
+      )
+   }
+
+}
 // 异步发送消息的action
 export const sendMsg=(from,to,content)=>{
    return dispatch=>{
       console.log('发送消息',from,to,content);
-      initIO()
+     
       // 发送消息
       io.socket.emit('sendMsg',{from,to,content})
    }
