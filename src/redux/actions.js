@@ -18,6 +18,7 @@ if(!io.socket){
    io.socket=io('ws://localhost:5000')
    io.socket.on('recevieMsg',function(chatMsg){
       console.log("接收到服务器的消息",chatMsg)
+      
       })
 }
 
