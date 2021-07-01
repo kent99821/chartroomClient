@@ -1,74 +1,143 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NavBar, List, InputItem } from "antd-mobile";
-import {sendMsg} from '../../redux/actions'
-import '../../assets/css/index.css'
+import { NavBar, List, InputItem, Grid } from "antd-mobile";
+import { sendMsg } from "../../redux/actions";
+import "../../assets/css/index.css";
 const Item = List.Item;
 class Chat extends Component {
-    state={
-        content:""
+  state = {
+    content: "",
+    isShow: false, // 是否显示表情列表
+    
+  };
+  componentWillMount() {
+    const emojis = [
+      "😀",
+      "😃",
+      "😄",
+      "😁",
+      "😆",
+      "🤣",
+      "😂",
+      "🙂",
+      "😉",
+      "😊",
+      "😇",
+      "😍",
+      "🤩",
+      "😗",
+      "😚",
+      "😙",
+      "😋",
+      "😛",
+      "😜",
+      "🤪",
+      "😝",
+      "🤗",
+      "🤭",
+      "🤫",
+      "🤔",
+      "🤐",
+      "🤨",
+      "😐",
+      "😑",
+      "😶",
+      "😶‍🌫️",
+      "😏",
+      "😒",
+      "🙄",
+      "😬",
+      "🤥",
+      "😌",
+      "😔",
+      "😪",
+      "🤤",
+      "😴",
+      "🤒",
+      "👌",
+      "🙏",
+      "💪",
+    ];
+    this.emojis=emojis.map(emji=>({text:emji}))
+  }
+  handleSend = () => {
+    const from = this.props.user._id;
+    const id = this.props.match.params.userid;
+    const content = this.state.content.trim();
+    //发送请求
+    if (content) {
+      this.props.sendMsg(from, id, content);
     }
-    handleSend=()=>{
-        const from=this.props.user._id
-        const id=this.props.match.params.userid
-        const content=this.state.content.trim()
-        //发送请求
-        if(content){
-            this.props.sendMsg(from,id,content)
-        }
-        //清除content
-        this.setState({content:""})
-    }
+    //清除content
+    this.setState({ content: "" });
+  };
   render() {
-    const {user}=this.props
-    const {users,chatMsgs}=this.props.chat
+    const { user } = this.props;
+    const { users, chatMsgs } = this.props.chat;
     // 计算当前聊天的ID
-    const meId=user._id
-    if(!users[meId]){
-      return null
+    const meId = user._id;
+    if (!users[meId]) {
+      return null;
     }
-    const targetId=this.props.match.params.userid
-    const chatId=[meId,targetId].sort().join('_')
+    const targetId = this.props.match.params.userid;
+    const chatId = [meId, targetId].sort().join("_");
     //对chatMsgs过滤
-    const msgs=chatMsgs.filter(msg=>msg.chat_id===chatId)
+    const msgs = chatMsgs.filter((msg) => msg.chat_id === chatId);
     // 得到用户的头像
-    const targetHeader=users[targetId].header
-    const targetIcon=targetHeader? require(`../../assets/images/${targetHeader}.png`).default:null
+    const targetHeader = users[targetId].header;
+    const targetIcon = targetHeader
+      ? require(`../../assets/images/${targetHeader}.png`).default
+      : null;
 
-    return(
-    <div id="chat-page" >
-      <NavBar>aa</NavBar>
-      <List>
-        {
-          msgs.map(msg=>{
+    return (
+      <div id="chat-page">
+        <NavBar>aa</NavBar>
+        <List>
+          {msgs.map((msg) => {
             // 对方发给我的消息
-            if(targetId===msg.form){
-              return(
+            if (targetId === msg.from) {
+              return (
                 <Item key={msg._id} thumb={targetIcon}>
                   {msg.content}
                 </Item>
-              )
-            }else{
-              return(
+              );
+            } else {
+              return (
                 <Item key={msg._id} className="chat-me" extra="我">
-                   {msg.content}
+                  {msg.content}
                 </Item>
-              )
+              );
             }
-          })
-        }
-
-      </List>
-      <div className="am-tab-bar">
-        <InputItem 
-        value={this.state.content}
-        onChange={val=>this.setState({content:val})}
-        placeholder="请输入" extra={<span className="sp" onClick={this.handleSend}>发送</span>} />
+          })}
+        </List>
+        <div className="am-tab-bar">
+          <InputItem
+            value={this.state.content}
+            onChange={(val) => this.setState({ content: val })}
+            placeholder="请输入"
+            extra={
+              <span>
+                <span>😊</span>
+                <span className="sp" onClick={this.handleSend}>
+                  发送
+                </span>
+              </span>
+            }
+          />
+          <Grid
+            data={this.emojis}
+            columnNum={8}
+            carouselMaxRow={4}
+            isCarousel={true}
+            onClick={(item) => {
+              this.setState({ content: this.state.content + item.text });
+            }}
+          />
+        </div>
       </div>
-
-    </div>
-
-    )
+    );
   }
 }
-export default connect((state) => ({user:state.user,chat:state.chat}), {sendMsg})(Chat);
+export default connect((state) => ({ user: state.user, chat: state.chat }), {
+  sendMsg,
+})(Chat);
