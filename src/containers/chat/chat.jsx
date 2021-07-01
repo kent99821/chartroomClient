@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NavBar, List, InputItem, Grid } from "antd-mobile";
+import { NavBar, List, InputItem, Grid,Icon } from "antd-mobile";
 import { sendMsg } from "../../redux/actions";
 import "../../assets/css/index.css";
 const Item = List.Item;
@@ -8,7 +8,6 @@ class Chat extends Component {
   state = {
     content: "",
     isShow: false, // 是否显示表情列表
-    
   };
   componentWillMount() {
     const emojis = [
@@ -56,10 +55,19 @@ class Chat extends Component {
       "🤒",
       "👌",
       "🙏",
-      "💪"
+      "💪",
     ];
-    this.emojis=emojis.map(emji=>({text:emji}))
+    this.emojis = emojis.map((emji) => ({ text: emji }));
+  };
+  componentDidMount(){
+    // 初始化显示列表
+    window.scrollTo(0,document.body.scrollHeight)
   }
+  componentDidUpdate(){
+    // 更新显示列表
+    window.scrollTo(0,document.body.scrollHeight)
+  }
+
   handleSend = () => {
     const from = this.props.user._id;
     const id = this.props.match.params.userid;
@@ -69,7 +77,18 @@ class Chat extends Component {
       this.props.sendMsg(from, id, content);
     }
     //清除content
-    this.setState({ content: "" });
+    this.setState({ content: "",isShow:false });
+  };
+  // 切换显示表情包
+  toggleShow=()=>{
+    const isShow=!this.state.isShow
+    this.setState({isShow})
+    if(isShow){
+      setTimeout(()=>{
+        window.dispatchEvent(new Event('resize'))
+      },0)
+    }
+
   };
   render() {
     const { user } = this.props;
@@ -91,8 +110,14 @@ class Chat extends Component {
 
     return (
       <div id="chat-page">
-        <NavBar>aa</NavBar>
-        <List>
+        <NavBar 
+        icon={<Icon type='left' />}
+         className="sticky-header"
+         onLeftClick={()=>this.props.history.goBack()}
+         >
+           {users[targetId].username}
+           </NavBar>
+        <List className="chatPage">
           {msgs.map((msg) => {
             // 对方发给我的消息
             if (targetId === msg.from) {
@@ -110,30 +135,36 @@ class Chat extends Component {
             }
           })}
         </List>
+        
         <div className="am-tab-bar">
           <InputItem
             value={this.state.content}
             onChange={(val) => this.setState({ content: val })}
             placeholder="请输入"
+            onFocus={()=>this.setState({isShow:false})}
             extra={
               <span>
-                <span>😊</span>
+                <span onClick={this.toggleShow}>😊</span>
                 <span className="sp" onClick={this.handleSend}>
                   发送
                 </span>
               </span>
             }
           />
-          <Grid
-            data={this.emojis}
-            columnNum={8}
-            carouselMaxRow={4}
-            isCarousel={true}
-            onClick={(item) => {
-              this.setState({ content: this.state.content + item.text });
-            }}
-          />
+      
         </div>
+        {this.state.isShow?(
+      <Grid
+      data={this.emojis}
+      columnNum={8}
+      carouselMaxRow={4}
+      isCarousel={true}
+      onClick={(item) => {
+        this.setState({ content: this.state.content + item.text });
+      }}
+    />
+        ):null}
+  
       </div>
     );
   }

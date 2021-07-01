@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { WingBlank,WhiteSpace,Card } from "antd-mobile";
 import { withRouter } from "react-router";
+import "../../assets/css/index.css";
 const Header=Card.Header
 const Body=Card.Body
 
@@ -14,8 +15,8 @@ const Body=Card.Body
   render() {
      
     return (
-      <div>
-        <WingBlank style={{marginBottom:50,marginTop:50}}>
+      <div className="list">
+        <WingBlank  style={{marginBottom:50,marginTop:50}}>
           {
              this.props.userList.map(user=>(
                 <div key={user._id}>

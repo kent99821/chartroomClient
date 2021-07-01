@@ -35,7 +35,19 @@
     height: 5vw;
 }
 .am-tab-bar{
-    position:fixed;
-    top: 94vh;
+    position:relative;
+    top: 0vh;
 
+}
+.chatPage{
+    /* height: 93vh; */
+    overflow:scroll;
+    margin-top: 50;
+    margin-bottom: 50;
+}
+.list{
+    overflow:scroll;
+}
+.footer{
+    position: absolute;
 }

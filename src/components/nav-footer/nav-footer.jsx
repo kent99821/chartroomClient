@@ -2,7 +2,7 @@ import React  from "react";
 import propTypes from 'prop-types'
 import {TabBar} from 'antd-mobile'
 import {withRouter} from 'react-router-dom'
-
+import "../../assets/css/index.css";
 const Item=TabBar.Item
 class NavFooter extends React.Component{
     static propTypes={
@@ -13,7 +13,7 @@ class NavFooter extends React.Component{
         const navList=this.props.navList.filter(nav=>!nav.hide)
         const {pathname}=this.props.location
         return (
-            <TabBar>
+            <TabBar className="sticky-header">
                 {
                     navList.map((nav,index)=>(
                         
