@@ -56,7 +56,7 @@ class Chat extends Component {
       "🤒",
       "👌",
       "🙏",
-      "💪",
+      "💪"
     ];
     this.emojis=emojis.map(emji=>({text:emji}))
   }
