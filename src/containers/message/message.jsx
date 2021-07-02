@@ -1,10 +1,68 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux' 
+import {List,Badge} from 'antd-mobile'
+const Item=List.Item
+const Brief=Item.Brief
+// 对chatMsgs进行分组 并得到每组的lastMsg组成的数组
+function getLastMsgs(chatMsgs){
+  // 创建容器装所有的chatMsgs
+  const lastMsgObjs={}
+  chatMsgs.forEach(msg => {
+
+    const chatId=msg.chat_id
+    let lastMsg=lastMsgObjs[chatId]
+    if(!lastMsg){
+      lastMsgObjs[chatId]=msg
+    }else{
+      if(msg.create_time>lastMsg.create_time){
+        lastMsgObjs[chatId]=msg
+      }
+    }
+  });
+  // 得到所有的lastMsg的数组
+  const lastMsgs=Object.values(lastMsgObjs)
+  // 对数组进行排序（按照create_time降序)
+  lastMsgs.sort(function(m1,m2){
+    return m2.create_time-m1.create_time
+  })
+  return lastMsgs
+}
  class Message extends Component {
      render() {
-          return (<div>消息列表</div>) 
+       const{user}=this.props
+       const {users,chatMsgs}=this.props.chat
+      //  对chatMsgs按chat_id进行分组
+      const lastMsgs=getLastMsgs(chatMsgs)
+          return (
+            
+            <List style={{marginTop:50,marginBottom:50}}>
+              {
+                lastMsgs.map(msg=>{
+                  const targetUserId=msg.to===user._id?msg.from:msg.to
+                  const targetUser=users[targetUserId]
+                  return (
+                    <Item 
+                    key={msg._id}
+                    extra={<Badge text={0}/>}
+                    thumb={targetUser.header?require(`../../assets/images/${targetUser.header}.png`).default:null}
+                    arrow='horizontal'
+                    onClick={()=>this.props.history.push(`/chat/${targetUserId}`)}
+                    >
+                     {msg.content}
+                      <Brief>用户:{targetUser.username}</Brief>
+                    </Item>
+                  )
+
+                }
+     
+
+                )
+              }
+             
+            </List>
+          ) 
         } }
 export default connect (
-            state=>({}),
+            state=>({user:state.user,chat:state.chat}),
             {}
         )(Message)
