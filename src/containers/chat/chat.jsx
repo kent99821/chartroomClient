@@ -136,7 +136,7 @@ class Chat extends Component {
           })}
         </List>
         
-        <div className="am-tab-bar">
+        <div className="fs">
           <InputItem
             value={this.state.content}
             onChange={(val) => this.setState({ content: val })}

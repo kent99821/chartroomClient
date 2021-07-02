@@ -14,7 +14,7 @@ import Personal from "../personal/personal";
 import NotFound from "../not-found/not-found"
 import NavFooter from "../../components/nav-footer/nav-footer";
 import Chat from "../chat/chat"
-
+import '../../assets/css/index.css'
 class Main extends Component {
     navList = [{
         path: '/laoban',
@@ -93,7 +93,7 @@ class Main extends Component {
           }
         }
         return (
-            <div>
+            <div className="main">
                 {currentNav ? <NavBar className='sticky-header'>{currentNav.title}</NavBar> :null}
                 <Switch>
                     {
@@ -104,7 +104,7 @@ class Main extends Component {
                     <Route path='/chat/:userid' component={Chat}/>
                     <Route component={NotFound} />
                 </Switch>
-                {currentNav ?<NavFooter navList={navList}/> :null}
+                {currentNav ?<NavFooter  navList={navList}/> :null}
             </div>
 
         )

@@ -4,14 +4,28 @@
     font-size: 18px;
 }
 
-.am-tab-bar {
+.am-tab-bar{
     /*使导航始终在底部*/
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+    position:fixed;
+    top: 0vh;
+    width: 100vw;
     height: inherit;
+  
+ 
+}
+.main{
+    width: 100vw;
+    height: 100vh;
+ 
 }
 
+.fs{
+    /*使导航始终在底部*/
+    position: fixed;
+    bottom: 0vh;
+    width: 100vw;
+    height: 8vh;
+}
 .sticky-header {
     /*使导航始终在底部*/
     position: fixed;
@@ -34,11 +48,8 @@
 .am-input-extra{
     height: 5vw;
 }
-.am-tab-bar{
-    position:relative;
-    top: 0vh;
 
-}
+
 .chatPage{
     /* height: 93vh; */
     overflow:scroll;
@@ -48,6 +59,15 @@
 .list{
     overflow:scroll;
 }
-.footer{
-    position: absolute;
-}
+
+
+#tab-bar.demo {
+    display: flex;
+    flex-direction: column;
+  }
+  #tab-bar .demoName {
+    height: 40px;
+  }
+  #tab-bar .demo-preview-item .am-tab-bar {
+    background-color: white;
+  }

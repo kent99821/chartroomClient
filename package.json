@@ -48,6 +48,7 @@
   "devDependencies": {
     "babel-plugin-import": "^1.13.3",
     "customize-cra": "^1.0.0",
+    "eslint-plugin-css-modules": "^2.11.0",
     "react-app-rewired": "^2.1.8",
     "redux-devtools-extension": "^2.13.8"
   }
