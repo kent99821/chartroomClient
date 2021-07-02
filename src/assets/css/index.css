@@ -1,73 +1,28 @@
-.error-msg {
+.error-msg { 
     color: red;
     text-align: center;
     font-size: 18px;
-}
-
-.am-tab-bar{
-    /*使导航始终在底部*/
-    position:fixed;
-    top: 0vh;
-    width: 100vw;
-    height: inherit;
+  }
   
- 
-}
-.main{
-    width: 100vw;
-    height: 100vh;
- 
-}
-
-.fs{
-    /*使导航始终在底部*/
+  .am-tab-bar{  /*使导航始终在底部*/
     position: fixed;
-    bottom: 0vh;
-    width: 100vw;
-    height: 8vh;
-}
-.sticky-header {
-    /*使导航始终在底部*/
-    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: inherit; 
+  }
+  
+  .sticky-header{  /*使标题始终在顶部*/
     z-index: 10;
+    position: fixed;
     top: 0;
     width: 100%;
-    height: 20vw;
-}
-
-/*消息文本居右*/
-#chat-page .chat-me .am-list-extra {
-    flex-basis: auto;
-    /*宽度包裹内容*/
-}
-
-#chat-page .chat-me .am-list-content {
+  }
+  
+  /*消息文本居右*/
+  #chat-page .chat-me .am-list-extra {
+    flex-basis: auto;  /*宽度包裹内容*/
+  }
+  #chat-page .chat-me .am-list-content {
     padding-right: 15px;
     text-align: right;
-}
-.am-input-extra{
-    height: 5vw;
-}
-
-
-.chatPage{
-    /* height: 93vh; */
-    overflow:scroll;
-    margin-top: 50;
-    margin-bottom: 50;
-}
-.list{
-    overflow:scroll;
-}
-
-
-#tab-bar.demo {
-    display: flex;
-    flex-direction: column;
-  }
-  #tab-bar .demoName {
-    height: 40px;
-  }
-  #tab-bar .demo-preview-item .am-tab-bar {
-    background-color: white;
   }
