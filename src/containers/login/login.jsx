@@ -49,7 +49,7 @@ import Logo from '../../components/logo/logo'
 
         return (
             <div>
-                <NavBar>boss&nbsp;直&nbsp;聘</NavBar>
+                <NavBar>聊&nbsp;天&nbsp;室</NavBar>
                 <Logo />
                 <WingBlank>
                     <List>

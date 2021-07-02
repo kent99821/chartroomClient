@@ -4,19 +4,29 @@ import {List,Badge} from 'antd-mobile'
 const Item=List.Item
 const Brief=Item.Brief
 // 对chatMsgs进行分组 并得到每组的lastMsg组成的数组
-function getLastMsgs(chatMsgs){
+function getLastMsgs(chatMsgs,userId){
   // 创建容器装所有的chatMsgs
   const lastMsgObjs={}
   chatMsgs.forEach(msg => {
-
+    // 对msg进行个体统计
+    if(msg.to===userId&&!msg.read){
+      msg.unReadCount=1
+    }else{
+      msg.unReadCount=0
+    }
+   
     const chatId=msg.chat_id
     let lastMsg=lastMsgObjs[chatId]
     if(!lastMsg){
       lastMsgObjs[chatId]=msg
+
     }else{
+      const unReadCount=lastMsg.unReadCount+msg.unReadCount
+    
       if(msg.create_time>lastMsg.create_time){
         lastMsgObjs[chatId]=msg
       }
+      lastMsgObjs[chatId].unReadCount=unReadCount
     }
   });
   // 得到所有的lastMsg的数组
@@ -32,7 +42,7 @@ function getLastMsgs(chatMsgs){
        const{user}=this.props
        const {users,chatMsgs}=this.props.chat
       //  对chatMsgs按chat_id进行分组
-      const lastMsgs=getLastMsgs(chatMsgs)
+      const lastMsgs=getLastMsgs(chatMsgs,user._id)
           return (
             
             <List style={{marginTop:50,marginBottom:50}}>
@@ -43,7 +53,7 @@ function getLastMsgs(chatMsgs){
                   return (
                     <Item 
                     key={msg._id}
-                    extra={<Badge text={0}/>}
+                    extra={<Badge text={msg.unReadCount}/>}
                     thumb={targetUser.header?require(`../../assets/images/${targetUser.header}.png`).default:null}
                     arrow='horizontal'
                     onClick={()=>this.props.history.push(`/chat/${targetUserId}`)}

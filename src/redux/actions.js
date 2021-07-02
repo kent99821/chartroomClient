@@ -19,7 +19,7 @@ function initIO(dispatch,userid){
          console.log("接收到服务器的消息",chatMsg)
          // 只有当chatMsg是当前用户相关的消息，采取分发同步action保存信息
          if(userid===chatMsg.from||userid===chatMsg.to){
-            dispatch(receiveMsg(chatMsg))
+            dispatch(receiveMsg(chatMsg,userid))
          }
          })                                                                                                    
    }
@@ -39,9 +39,9 @@ export const resetUser=(msg)=>({type:RESET_USER,data:msg})
 // 接收用户列表的同步action
 const receiveUserList=(userList)=>({type:RECEIVE_USER_LIST,data:userList})
 // 接收信息列表的同步action
-const receiveMsgList=({users,chatMsgs})=>({type:RECEIVE_MSG_LIST,data:{users,chatMsgs}})
+const receiveMsgList=({users,chatMsgs,userid})=>({type:RECEIVE_MSG_LIST,data:{users,chatMsgs,userid}})
 // 接收信息同步action
-const receiveMsg=(chatMsg)=>({type:RECEIVE_MSG,data:chatMsg}) 
+const receiveMsg=(chatMsg,userid)=>({type:RECEIVE_MSG,data:{chatMsg,userid}}) 
 
 
 
@@ -143,7 +143,7 @@ async function getMsgList (dispatch,userid){
    if(result.code===0){
       const {users,chatMsgs}=result.data
       // 分发同步action
-      dispatch(receiveMsgList({users,chatMsgs})
+      dispatch(receiveMsgList({users,chatMsgs,userid})
       )
    }
 

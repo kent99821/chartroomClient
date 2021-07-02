@@ -66,7 +66,7 @@ class Main extends Component {
             return <Redirect to='/login' />
         }
         // 如果有 读取redux中的user状态
-        const user = this.props.user
+        const {user,unReadCount} = this.props
         // 如果user没有_id 返回null
         if (!user._id) {
             return null
@@ -104,7 +104,7 @@ class Main extends Component {
                     <Route path='/chat/:userid' component={Chat}/>
                     <Route component={NotFound} />
                 </Switch>
-                {currentNav ?<NavFooter  navList={navList}/> :null}
+                {currentNav ?<NavFooter  navList={navList} unReadCount={unReadCount}/> :null}
             </div>
 
         )
@@ -112,7 +112,7 @@ class Main extends Component {
 }
 
 export default connect(
-    state => ({ user: state.user }),
+    state => ({ user: state.user,unReadCount:state.chat.unReadCount }),
     { getUser }
 )(Main)
 /** 1 实现自动登录：
