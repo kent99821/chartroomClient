@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { NavBar, List, InputItem, Grid,Icon } from "antd-mobile";
-import { sendMsg } from "../../redux/actions";
+import { sendMsg,readMsg } from "../../redux/actions";
 import "../../assets/css/index.css";
 const Item = List.Item;
 class Chat extends Component {
@@ -62,6 +62,11 @@ class Chat extends Component {
   componentDidMount(){
     // 初始化显示列表
     window.scrollTo(0,document.body.scrollHeight)
+    // 发送请求更新消息未读状态
+    const from = this.props.match.params.userid;
+    const to=this.props.user._id
+    this.props.readMsg(from,to)
+
   }
   componentDidUpdate(){
     // 更新显示列表
@@ -170,5 +175,5 @@ class Chat extends Component {
   }
 }
 export default connect((state) => ({ user: state.user, chat: state.chat }), {
-  sendMsg,
+  sendMsg,readMsg
 })(Chat);
