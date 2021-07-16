@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { NavBar, List, InputItem, Grid,Icon } from "antd-mobile";
+import QueueAnim from 'rc-queue-anim'
 import { sendMsg,readMsg } from "../../redux/actions";
 import "../../assets/css/index.css";
 const Item = List.Item;
@@ -62,24 +63,27 @@ class Chat extends Component {
   componentDidMount(){
     // 初始化显示列表
     window.scrollTo(0,document.body.scrollHeight)
-    // 发送请求更新消息未读状态
-    const from = this.props.match.params.userid;
-    const to=this.props.user._id
-    this.props.readMsg(from,to)
+
 
   }
   componentDidUpdate(){
     // 更新显示列表
     window.scrollTo(0,document.body.scrollHeight)
   }
+  componentWillMount(){
+        // 发送请求更新消息未读状态
+        const from = this.props.match.params.userid;
+        const to=this.props.user._id
+        this.props.readMsg(from,to)
+  }
 
   handleSend = () => {
     const from = this.props.user._id;
-    const id = this.props.match.params.userid;
+    const to = this.props.match.params.userid;
     const content = this.state.content.trim();
     //发送请求
     if (content) {
-      this.props.sendMsg(from, id, content);
+      this.props.sendMsg({from,to,content});
     }
     //清除content
     this.setState({ content: "",isShow:false });
@@ -122,7 +126,8 @@ class Chat extends Component {
          >
            {users[targetId].username}
            </NavBar>
-        <List className="chatPage">
+        <List className="chatPage" >
+          <QueueAnim type='alpha'delay={100}>
           {msgs.map((msg) => {
             // 对方发给我的消息
             if (targetId === msg.from) {
@@ -139,6 +144,8 @@ class Chat extends Component {
               );
             }
           })}
+          </QueueAnim>
+        
         </List>
         
         <div className="fs">
@@ -150,7 +157,7 @@ class Chat extends Component {
             extra={
               <span>
                 <span onClick={this.toggleShow}>😊</span>
-                <span className="sp" onClick={this.handleSend}>
+                <span  onClick={this.handleSend}>
                   发送
                 </span>
               </span>

@@ -146,6 +146,10 @@ export const login = (user) => {
 
   return async dispatch => {
     // 发送注册的异步ajax请求
+    /*const promise = reqLogin(user)
+    promise.then(response => {
+      const result = response.data  // {code: 0/1, data: user, msg: ''}
+    })*/
     const response = await reqLogin(user)
     const result = response.data
     if(result.code===0) {// 成功
